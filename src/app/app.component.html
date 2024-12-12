@@ -1,0 +1,20 @@
+<div *ngIf="menu" >
+  <app-menubar/>
+</div>
+
+<div [style]="menu ? 'margin-top: 70px' : ''">
+  <router-outlet />
+</div>
+
+<div class="fixed bottom-5 right-5">
+  <p-button icon="pi pi-cog"  (onClick)="hiddenMenu()" [pTooltip]="'Nhấn để ẩn Menu'" />
+</div>
+
+<p-blockUI [blocked]="isBlocked">
+  <ng-template pTemplate="blocker">
+    <div class="custom-block-ui flex justify-center items-center flex-col" style="color:#f3f4f6">
+      <div class="loader"></div>
+      <div style="font-size: 14px; padding-top: 10px" class="font-bold ">Please wait...</div>
+    </div>
+  </ng-template>
+</p-blockUI>

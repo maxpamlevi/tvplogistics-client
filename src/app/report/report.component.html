@@ -1,0 +1,40 @@
+<div class="flex flex-col">
+  <div class="flex flex-row">
+    <p-multiSelect [options]="Options" autoWidth="true"
+                   [(ngModel)]="selectedOption"
+                   [showHeader]="true"
+                   [selectAll]="selectAll"
+                   [showClear]="true"
+                   [showToggleAll]="true"
+                   (onPanelHide)="onMonthChange()"
+                   [style]="{'width':'100%'}"
+                   placeholder="Select a month"
+                   [virtualScroll]="true"
+                   [virtualScrollItemSize]="43"
+                   (onSelectAllChange)="onSelectAllChange($event)"
+                   class="w-1/4"
+    ></p-multiSelect>
+  </div>
+
+
+  <div class="mt-4 pt-4" height='600px'>
+    <ejs-pivotview #pivotview id='PivotView' height='600px'
+                   [dataSourceSettings]="dataSourceSettings"
+                   [showGroupingBar]="true"
+                   [showFieldList]="true"
+                   [displayOption]="displayOption"
+                   [chartSettings]="chartSettings"
+                   [allowExcelExport]='true'
+                   [allowNumberFormatting]='true'
+                   [allowConditionalFormatting]='true'
+                   [allowPdfExport]='true'
+                   [showToolbar]='true'
+                   [allowCalculatedField]='true'
+                   [toolbar]='toolbarOptions'
+                   [chartTypes]='chartTypeOptions'
+                   [enableVirtualization]="true"
+    >
+    </ejs-pivotview>
+  </div>
+</div>
+

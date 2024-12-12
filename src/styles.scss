@@ -1,0 +1,109 @@
+
+@import '../node_modules/@syncfusion/ej2-base/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-buttons/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-calendars/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-dropdowns/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-inputs/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-navigations/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-popups/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-notifications/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-angular-grids/styles/material.css';
+
+@import '../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-lists/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-spreadsheet/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-grids/styles/material.css';
+
+@import "../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css";
+@import '../node_modules/@syncfusion/ej2-angular-pivotview/styles/material.css';
+
+
+@import "primeng/resources/themes/aura-light-blue/theme.css";
+@import "primeng/resources/primeng.min.css";
+@import "primeicons/primeicons.css";
+
+@layer tailwind-base, primeng, tailwind-utilities;
+
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
+}
+
+.z-99999{
+  z-index: 1101;
+}
+
+
+html {
+  font-size: 13px;
+}
+
+body {
+  font-weight: normal;
+  background: var(--surface-ground);
+  color: var(--text-color);
+  /*padding: 1rem;*/
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.e-grid .e-headercell {
+  /*background-color: #333; !* Override the header background color *!*/
+  color: black;
+  font-weight: bold;
+}
+
+.p-menubar {
+  background-color: #ffffff !important; /* Màu nền bạn muốn */
+}
+
+
+.card {
+  background: var(--surface-card);
+  padding: 2rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.e-grid .e-headercell {
+  background-color: #f3f4f6;
+  /*color: black;*/
+}
+
+.loader {
+  width: 120px;
+  height: 22px;
+  border-radius: 40px;
+  color: #ffffff;
+  border: 2px solid;
+  position: relative;
+  overflow: hidden;
+}
+.loader::before {
+  content: "";
+  position: absolute;
+  margin: 2px;
+  width: 14px;
+  top: 0;
+  bottom: 0;
+  left: -20px;
+  border-radius: inherit;
+  background: currentColor;
+  box-shadow: -10px 0 12px 3px currentColor;
+  clip-path: polygon(0 5%, 100% 0,100% 100%,0 95%,-30px 50%);
+  animation: l14 1s infinite linear;
+}
+@keyframes l14 {
+  100% {left: calc(100% + 20px)}
+}
+
+.e-grid .e-rhandler {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  box-sizing: border-box;
+}

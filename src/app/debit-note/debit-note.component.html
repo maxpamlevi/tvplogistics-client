@@ -1,0 +1,98 @@
+<div class="control-section" *ngIf="show">
+  <div class="flex pb-5 justify-end">
+    <p-button (onClick)="submitData()" class="pr-4" icon="pi pi-check" label="Done" severity="success" *ngIf="doneAccess()"/>
+    <p-button (onClick)="returnData()" class="pr-4" icon="pi pi-replay" label="Return" severity="danger" *ngIf="returnAccess()"/>
+    <p-button (onClick)="submitData()" class="pr-4" icon="pi pi-check" label="Submit" severity="info" *ngIf="submitAccess()"/>
+    <p-button (onClick)="previewPdf()" class="pr-4" icon="pi pi-print" label="Preview" severity="secondary"  *ngIf="grid.getSelectedRecords().length > 0"/>
+
+    <p-dropdown
+      autoWidth="false"
+      [style]="{ 'width': '200px' }"
+      [options]="options"
+      [(ngModel)]="selectedOption"
+      (onChange)="changeOption()"
+      optionLabel="name"
+      placeholder="Select"
+    />
+  </div>
+
+  <div>
+    <ejs-grid
+      #grid
+      [dataSource]="data"
+      [allowPaging]="true"
+      [pageSettings]="pageSettings"
+      [allowSorting]="true"
+      [allowFiltering]="true"
+      [allowResizing]="true"
+      [filterSettings]="filterSettings"
+      [editSettings]="editSettings"
+      [toolbar]="toolbar"
+      [allowExcelExport]="true"
+      (toolbarClick)="toolbarClick($event)"
+      (actionComplete)="actionComplete($event)"
+      (recordDoubleClick)="recordDoubleClick($event)"
+      [loadingIndicator]="{ indicatorType: 'Spinner' }"
+      height="70vh"
+      [showColumnChooser]="true"
+      (created)="loadColumnsFromLocalStorage()"
+    >
+      <e-columns>
+        <e-column type="checkbox" width="50" [allowEditing]="false"></e-column>
+        <e-column [allowEditing]="false" field="id" headerText="ID" isPrimaryKey="true" textAlign="Left" width="90"></e-column>
+        <e-column field="so" headerText="SO" textAlign="Left" width="160"></e-column>
+        <e-column [edit]="customerEdit" editType="dropdownedit" field="customer" headerText="Customer" textAlign="Left" width="400"></e-column>
+        <e-column editType="datepickeredit" field="date" format="{ type: 'date', format: 'dd/MM/yyyy', locale: 'vi' }" headerText="Date" textAlign="Center" width="150">
+          <ng-template #template let-data>
+            <div>{{ data.date | date: 'MM/dd/YYYY' }}</div>
+          </ng-template>
+        </e-column>
+        <e-column field="description" headerText="Description" textAlign="Left" width="600"></e-column>
+        <e-column field="contract" headerText="Contract" textAlign="Center" width="180"></e-column>
+        <e-column field="uom" headerText="UOM" width="120" textAlign="Center"></e-column>
+        <e-column field="quantity" format="N3" headerText="Quantity" textAlign="Right" width="130"></e-column>
+        <e-column field="unit_price" format="N3" headerText="Unit Price" textAlign="Right" width="160">
+          <ng-template #template let-data >
+            <div *ngIf="data.unit_price > 0"> {{data.unit_price  | number: '1.0-3' }} đ </div>
+          </ng-template>
+        </e-column>
+        <e-column field="vat" headerText="VAT" width="120" textAlign="Right" format="N1">
+          <ng-template #template let-data >
+            <div *ngIf="data.vat > 0"> {{data.vat}} % </div>
+          </ng-template>
+        </e-column>
+        <e-column [allowEditing]="false" field="amount" format="N3" headerText="Amount" textAlign="Right" width="160">
+          <ng-template #template let-data>
+            <div  *ngIf="data.amount > 0">{{ data.amount | number: '1.0-3' }} đ</div>
+          </ng-template>
+        </e-column>
+        <e-column [allowEditing]="false" field="amount_vat" format="N3" headerText="Amount VAT" textAlign="Right" width="180">
+          <ng-template #template let-data>
+            <div *ngIf="data.amount_vat > 0">{{ data.amount_vat | number: '1.0-3' }} đ</div>
+          </ng-template>
+        </e-column>
+        <e-column field="deposit" headerText="Deposit" width="140" textAlign="Right" format="N3">
+          <ng-template #template let-data>
+            <div>{{ data.deposit | currency: 'VND' }}</div>
+          </ng-template>
+        </e-column>
+        <e-column field="compensation" headerText="Compensation" width="160" textAlign="Right" format="N3">
+          <ng-template #template let-data>
+            <div>{{ data.compensation | currency: 'VND' }}</div>
+          </ng-template>
+        </e-column>
+        <e-column editType="datepickeredit" field="payment_date" format="{ type: 'date', format: 'dd/MM/yyyy', locale: 'vi' }" headerText="Payment Date" textAlign="Center" width="150">
+          <ng-template #template let-data>
+            <div>{{ data.payment_date | date: 'MM/dd/YYYY' }}</div>
+          </ng-template>
+        </e-column>
+        <e-column field="refund" headerText="Refund" width="140" textAlign="Center" format="N3"></e-column>
+      </e-columns>
+    </ejs-grid>
+  </div>
+</div>
+
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<div class="fixed top-0 right-2 z-99999">
+  <p-messages></p-messages>
+</div>

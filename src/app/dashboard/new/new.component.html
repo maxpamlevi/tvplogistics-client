@@ -1,0 +1,226 @@
+<div class="container mx-auto">
+  <form [formGroup]="serviceOrderForm" (ngSubmit)="onSubmit()">
+    <div class="flex flex-wrap ">
+
+      <p-floatLabel class="pb-2 px-3 my-4 w-1/4">
+        <p-dropdown class="uppercase" [options]="branchOptions" formControlName="branch" id="branch" autoWidth="false"
+                    [style]="{'width':'100%'}"></p-dropdown>
+        <label for="branch" class="font-bold text-gray-500 transition-all pointer-events-none">
+          Branch
+        </label>
+      </p-floatLabel>
+
+      <p-floatLabel class="pb-2 px-3 my-4 w-1/4">
+
+        <input id="so" pInputText formControlName="so"
+               class="w-full  border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+        <div *ngIf="isInvalid('so')" class="text-red-500 text-lg absolute left-3 top-13">
+          *
+        </div>
+        <label for="so"
+               class=" font-bold  text-gray-500 transition-all pointer-events-none">
+          SO No.
+        </label>
+      </p-floatLabel>
+
+      <div class="pb-2 px-3 my-4 w-1/4 flex">
+        <p-floatLabel class="py-b w-full">
+          <p-dropdown id="so_type" [options]="soTypeOptions" formControlName="so_type" autoWidth="false"
+                      [style]="{'width':'100%'}"/>
+          <label for="so_type"
+                 class="font-bold  text-gray-500 transition-all pointer-events-none">
+            SO Type
+          </label>
+        </p-floatLabel>
+      </div>
+
+
+      <p-floatLabel class="pb-2 px-3 my-4 w-1/4">
+        <input id="month" pInputText formControlName="month" class="w-full"/>
+        <div *ngIf="isInvalid('month')" class="text-red-500 text-lg absolute left-3 top-13">
+          *
+        </div>
+        <label for="month" class="font-bold text-gray-500 transition-all pointer-events-none">
+          Month
+        </label>
+      </p-floatLabel>
+
+      <p-floatLabel *ngIf="users_data.length" class="pb-2 px-3 my-4 w-1/4">
+        <p-multiSelect  [options]="users_data" autoWidth="false"  formControlName="user_ids" id="users"
+                        optionLabel="name" optionValue="id"  showToggleAll="false"
+                        [style]="{'width':'100%'}"></p-multiSelect>
+        <div *ngIf="isInvalid('user_ids')" class="text-red-500 text-lg absolute left-3 top-13">
+          *
+        </div>
+        <label for="users" class="font-bold text-gray-500 transition-all pointer-events-none">
+          CS
+        </label>
+      </p-floatLabel>
+
+
+
+      <p-floatLabel class="pb-2 px-3 my-4 w-1/4">
+
+        <p-dropdown id="commodity" [options]="commodityOptions" formControlName="commodity" autoWidth="false"
+                    [style]="{'width':'100%'}"/>
+        <div *ngIf="isInvalid('commodity')" class="text-red-500 text-lg absolute left-3 top-13">
+          *
+        </div>
+        <label for="commodity"
+               class=" font-bold text-gray-500 transition-all pointer-events-none">
+          Commodity
+        </label>
+      </p-floatLabel>
+
+      <p-floatLabel class="pb-2 px-3 my-4 w-1/4">
+        <input id="name_of_vessel" pInputText formControlName="name_of_vessel" class="w-full"/>
+        <div *ngIf="isInvalid('name_of_vessel')" class="text-red-500 text-lg absolute left-3 top-13">
+          *
+        </div>
+        <label for="name_of_vessel" class="font-bold text-gray-500 transition-all pointer-events-none">
+          Name of vessel
+        </label>
+      </p-floatLabel>
+
+      <p-floatLabel class="pb-2 px-3 my-4 w-1/4">
+        <p-calendar
+          id="date_so"
+          [showButtonBar]="true"
+          formControlName="date_so" autoWidth="false"
+          [style]="{'width':'100%'}"/>
+        <div *ngIf="isInvalid('date_so')" class="text-red-500 text-lg absolute left-3 top-13">
+          *
+        </div>
+        <label for="date_so" class=" font-bold text-gray-500 transition-all pointer-events-none">Date SO
+        </label>
+      </p-floatLabel>
+
+      <p-floatLabel class="pb-2 px-3 my-4 w-1/2">
+        <p-multiSelect  [options]="customer" formControlName="customer" id="customer" autoWidth="false"
+                       optionLabel="name" optionValue="name" showToggleAll="false"
+                       [style]="{'width':'100%'}"></p-multiSelect>
+
+
+        <div *ngIf="isInvalid('customer')" class="text-red-500 text-lg absolute left-3 top-13">
+          *
+        </div>
+        <label for="customer" class="font-bold text-gray-500 transition-all pointer-events-none">
+          Customer Full
+        </label>
+      </p-floatLabel>
+
+      <p-floatLabel class="pb-2 px-3 my-4 w-1/4">
+        <input id="customer_no" pInputText formControlName="customer_no" class="w-full"/>
+        <div *ngIf="isInvalid('customer_no')" class="text-red-500 text-lg absolute left-3 top-13">
+          *
+        </div>
+        <label for="customer_no" class="font-bold text-gray-500 transition-all pointer-events-none">
+          Customer
+        </label>
+      </p-floatLabel>
+
+      <p-floatLabel class="pb-2 px-3 my-4 w-1/4">
+        <input id="key_customer" pInputText formControlName="key_customer" class="w-full"/>
+        <div *ngIf="isInvalid('key_customer')" class="text-red-500 text-lg absolute left-3 top-13">
+          *
+        </div>
+        <label for="key_customer" class="font-bold text-gray-500 transition-all pointer-events-none">
+          Key Customer
+        </label>
+      </p-floatLabel>
+
+
+      <p-floatLabel class="pb-2 px-3 my-4 w-1/2" *ngIf="vendor.length">
+        <p-multiSelect [options]="vendor" formControlName="vendor" id="vendor" autoWidth="false"
+                    optionLabel="name" optionValue="name" showToggleAll="false"
+                    [style]="{'width':'100%'}"></p-multiSelect>
+
+        <div *ngIf="isInvalid('vendor')" class="text-red-500 text-lg absolute left-3 top-13">
+          *
+        </div>
+        <label for="vendor" class="font-bold text-gray-500 transition-all pointer-events-none">
+          Vendor
+        </label>
+      </p-floatLabel>
+
+      <p-floatLabel class="pb-2 px-3 my-4 w-1/2">
+        <input class="w-full" formControlName="vendor_no" id="vendor_no" pInputText/>
+        <div *ngIf="isInvalid('vendor_no')" class="text-red-500 text-lg absolute left-3 top-13">
+          *
+        </div>
+        <label class="font-bold text-gray-500 transition-all pointer-events-none" for="vendor_no">
+          Vendor No
+        </label>
+      </p-floatLabel>
+
+      <p-floatLabel class="pb-2 px-3 my-4 w-1/2">
+        <input id="vehicle" pInputText formControlName="vehicle"
+               class="w-full border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+
+        <div *ngIf="isInvalid('vehicle')" class="text-red-500 text-lg absolute left-3 top-13">
+          *
+        </div>
+        <label for="type_cargo"
+               class=" font-bold text-gray-500 transition-all pointer-events-none">
+          Vehicle
+        </label>
+      </p-floatLabel>
+
+      <p-floatLabel class="pb-2 px-3 my-4 w-1/2">
+
+        <p-dropdown id="type_cargo" [options]="commodityOptions" formControlName="type_cargo" autoWidth="false"
+                    [style]="{'width':'100%'}"/>
+
+        <div *ngIf="isInvalid('type_cargo')" class="text-red-500 text-lg absolute left-3 top-13">
+          *
+        </div>
+        <label for="type_cargo"
+               class=" font-bold text-gray-500 transition-all pointer-events-none">
+          Type Cargo
+        </label>
+      </p-floatLabel>
+
+
+      <p-floatLabel class="pb-2 px-3 my-4 w-1/2">
+        <input id="location" pInputText formControlName="location"
+               class="w-full border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+        <div *ngIf="isInvalid('location')" class="text-red-500 text-lg absolute left-3 top-13">
+          *
+        </div>
+        <label for="location" class=" font-bold text-gray-500 transition-all pointer-events-none">
+          Location
+        </label>
+      </p-floatLabel>
+
+      <p-floatLabel class="pb-2 px-3 my-4 w-1/2">
+        <p-dropdown id="equipment" [options]="['Conveyor','Hopper']" formControlName="equipment" autoWidth="false"
+                    [style]="{'width':'100%'}"/>
+        <label for="equipment"
+               class=" font-bold text-gray-500 transition-all pointer-events-none">
+          Equipment
+        </label>
+      </p-floatLabel>
+
+      <p-floatLabel class="pb-2 px-3 my-4 w-full">
+        <textarea id="description" pInputText formControlName="description"
+               class="w-full  border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+        </textarea>
+        <label for="description"
+               class=" font-bold text-gray-500 transition-all pointer-events-none">
+          Description
+        </label>
+      </p-floatLabel>
+
+    </div>
+    <div class=" text-right">
+      <button pButton type="submit" label="Submit" icon="pi pi-check" [disabled]="false"
+              class="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700"></button>
+    </div>
+  </form>
+</div>
+
+
+<div class="fixed top-0 right-2 z-99999">
+  <p-messages></p-messages>
+</div>

@@ -1,0 +1,199 @@
+<div class="control-section" *ngIf="show">
+  <div class=" flex pb-5 justify-end">
+    <p-button (onClick)="submitData()" class="pr-4" icon="pi pi-check" label="Done" severity="success"
+              *ngIf="  updateAccess()"/>
+    <p-button (onClick)="returnData()" class="pr-4" icon="pi pi-replay" label="Return" severity="danger"
+              *ngIf="returnAccess()"/>
+    <p-dropdown autoWidth="false" [style]="{'width':'200px'}"
+                [options]="options"
+                [(ngModel)]="selectedOption"
+                (onChange)="changeOption()"
+                optionLabel="name"
+                placeholder="Select"/>
+  </div>
+
+  <ejs-grid
+    #grid
+    [dataSource]="data"
+    [allowPaging]="true"
+    [pageSettings]="pageSettings"
+    [allowSorting]="true"
+    [allowMultiSorting]="true"
+    [allowFiltering]="true"
+    [allowResizing]="true"
+    [filterSettings]="filterSettings"
+    [editSettings]="editSettings"
+    [toolbar]="toolbar"
+    [allowExcelExport]='true'
+    (toolbarClick)='toolbarClick($event)'
+    (actionComplete)='actionComplete($event)'
+    (recordDoubleClick)='recordDoubleClick($event)'
+    height='70vh'
+    [showColumnChooser]='true'
+    [allowGrouping]='false'
+    (created)="saveColumnsToLocalStorage()"
+    (excelQueryCellInfo)="excelQueryCellInfo($event)"
+  >
+    <e-columns>
+      <e-column type='checkbox' width='50' [allowEditing]="false"></e-column>
+      <e-column [allowEditing]="false" field="id" headerText="ID" width="90" textAlign="Center"
+                isPrimaryKey="true"></e-column>
+      <e-column [allowEditing]="isAdmin" field="month" headerText="Month" width="140" textAlign="Center"></e-column>
+      <e-column [allowEditing]="staffAccess()" field="contract" headerText="Contract" textAlign="Left"
+                width="140"></e-column>
+      <e-column [allowEditing]="false" field="date_so" headerText="Date SO" width="140" textAlign="Center">
+        <ng-template #template let-data>
+          <div>{{ data.date_so | date: 'MM/dd/YYYY' }}</div>
+        </ng-template>
+      </e-column>
+      <e-column [allowEditing]="isAdmin()" headerText="CS" width="140" textAlign="Center">
+        <ng-template #template let-data>
+          <div *ngIf="data.users">
+            {{ data.users | UserFieldPipe }}
+          </div>
+        </ng-template>
+      </e-column>
+      <e-column [allowEditing]="false" field="so" headerText="SO" width="140" textAlign="Center"></e-column><e-column [allowEditing]="false" field="location" headerText="Location" width="180" textAlign="Center"></e-column>
+        <e-column [allowEditing]="false" field="so_type" headerText="SO Type" width="120" textAlign="Center"></e-column>
+
+        <e-column [allowEditing]="false" field="equipment" headerText="Equipment" width="150" textAlign="Center"
+                format="string"></e-column>
+      <e-column *ngIf="isAdmin()" [allowEditing]="false" field="customer_no" headerText="Customer" textAlign="Center"
+                width="220"></e-column>
+      <e-column [allowEditing]="false" *ngIf="isAdmin()" field="key_customer" headerText="Key Customer" width="150"
+                textAlign="Center"></e-column>
+      <e-column [allowEditing]="false" *ngIf="isAdmin()" field="vendor_no" headerText="Vendor" width="140"
+                textAlign="Center"></e-column>
+      <e-column [allowEditing]="false" field="type_cargo" headerText="Type Cargo" width="140"
+                textAlign="Center"></e-column>
+      <e-column [allowEditing]="isAdmin()" field="commodity" headerText="Commodity" width="140"
+                textAlign="Center"></e-column>
+      <e-column [allowEditing]="staffAccess()" field="bill_of_lading" headerText="B/L NO." textAlign="Center"
+                width="140"></e-column>
+
+      <e-column [allowEditing]="staffAccess()" field="vehicle" headerText="Vehicle" width="140"
+                textAlign="Center"></e-column>
+      <e-column [allowEditing]="false" field="name_of_vessel" headerText="Name of Vessel" width="180"
+                textAlign="Center"></e-column>
+      <e-column [allowEditing]="false" field="description" headerText="Description" textAlign="Left"
+                width="430"></e-column>
+      <e-column [allowEditing]="staffAccess()" editType="datepickeredit" field="start" headerText="Start"
+                textAlign="Center" width="140">
+        <ng-template #template let-data>
+          <div>{{ data.start | date: 'MM/dd/YYYY' }}</div>
+        </ng-template>
+      </e-column>
+      <e-column [allowEditing]="staffAccess()" editType="datepickeredit" field="end" headerText="End" textAlign="Center"
+                width="140">
+        <ng-template #template let-data>
+          <div>{{ data.end | date: 'MM/dd/YYYY' }}</div>
+        </ng-template>
+      </e-column>
+      <e-column [allowEditing]="false" headerText="File" textAlign="Center" width="240">
+        <ng-template #template let-data>
+          <div class="flex items-center justify-center">
+            <input #selectedFile (change)="onUpload($event, data)"
+                   accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;"
+                   type="file"/>
+            <p-button (onClick)=" selectedFile.value = ''; selectedFile.click();" class="pr-4" icon="pi pi-upload"
+                      label="" severity="secondary"/>
+            <span *ngIf="files">{{ files.name }}</span>
+          </div>
+        </ng-template>
+      </e-column>
+
+      <e-column [allowEditing]="false" field="tvpl_load" format="N3" headerText="Load" textAlign="Right" width="160">
+        <ng-template #template let-data>
+          <a (click)="navigateToSheet(data)" class="no-underline text-black"
+             *ngIf="data.result.tvpl_load ">{{ data.result.tvpl_load | number: '1.3-3' }} </a>
+        </ng-template>
+      </e-column>
+      <e-column [allowEditing]="false" field="discharge" format="N3" headerText="Discharge" textAlign="Right"
+                width="160">
+        <ng-template #template let-data>
+          <a (click)="navigateToSheet(data)" class="no-underline text-black"
+             *ngIf="data.result.discharge ">{{ data.result.discharge | number: '1.3-3' }} </a>
+        </ng-template>
+      </e-column>
+      <e-column [allowEditing]="false" field="tvpl_truck" format="N3" headerText="Truck" textAlign="Right" width="160">
+        <ng-template #template let-data>
+          <a (click)="navigateToSheet(data)" class="no-underline text-black"
+             *ngIf="!!data.result.tvpl_truck ">{{ data.result.tvpl_truck | number: '1.3-3' }} </a>
+        </ng-template>
+      </e-column>
+      <e-column [allowEditing]="false" field="tvpl_barge" format="N3" headerText="Barge" textAlign="Right" width="160">
+        <ng-template #template let-data>
+          <a (click)="navigateToSheet(data)" class="no-underline text-black"
+             *ngIf="!!data.result.tvpl_barge ">{{ data.result.tvpl_barge | number: '1.3-3' }} </a>
+        </ng-template>
+      </e-column>
+      <e-column [allowEditing]="false" field="internal_wh" format="N3" headerText="Internal WH" textAlign="Right"
+                width="160">
+        <ng-template #template let-data>
+          <a (click)="navigateToSheet(data)" class="no-underline text-black"
+             *ngIf="!!data.result.internal_wh ">{{ data.result.internal_wh | number: '1.3-3' }} </a>
+        </ng-template>
+      </e-column>
+      <e-column [allowEditing]="false" field="file_data.external_wh" format="N3" headerText="External WH"
+                textAlign="Right" width="160">
+        <ng-template #template let-data>
+          <a (click)="navigateToSheet(data)" class="no-underline text-black"
+             *ngIf="!!data.result.external_wh ">{{ data.result.external_wh | number: '1.3-3' }} </a>
+        </ng-template>
+      </e-column>
+      <e-column [allowEditing]="false" field="total_wh" format="N3" headerText="Total WH" textAlign="Right" width="160">
+        <ng-template #template let-data>
+          <div *ngIf="!!data.result.total_wh ">{{ data.result.total_wh | number: '1.3-3' }}</div>
+        </ng-template>
+      </e-column>
+      <e-column [allowEditing]="false" field="grand_total" headerText="Grand Total" textAlign="Right" width="160">
+        <ng-template #template let-data>
+          <div *ngIf="!!data.result.grand_total ">{{ data.result.grand_total | number: '1.3-3' }}</div>
+        </ng-template>
+      </e-column>
+      <e-column [allowEditing]="false" *ngIf="notStaff()" field="revenue" format="N3" headerText="Revenue" width="160"
+                textAlign="Right">
+        <ng-template #template let-data>
+          <div class="flex justify-end items-center">
+            <span (click)="navigateToDeBitNote(data)" style="min-width: 60px"
+                  class="py-2 cursor-pointer"> {{ !data.result.revenue ? '' : data.result.revenue | number: '1.0-3' }}</span>
+          </div>
+        </ng-template>
+      </e-column>
+      <e-column [allowEditing]="false" *ngIf="notStaff()" field="cost" format="N3" headerText="Cost" width="140"
+                textAlign="Right">
+        <ng-template #template let-data>
+          <div class="flex justify-end items-center">
+            <span (click)="navigateToPaymentRequest(data)" style="min-width: 60px"
+                  class="py-2 cursor-pointer"> {{ !data.result.cost ? '' : data.result.cost | number: '1.0-3' }}</span>
+          </div>
+        </ng-template>
+      </e-column>
+      <e-column [allowEditing]="false" *ngIf="notStaff()" field="profit" format="N3" headerText="Profit" width="140"
+                textAlign="Right">
+        <ng-template #template let-data>
+          <div *ngIf="!!data.result.profit">{{ data.result.profit  | number: '1.0-3' }}</div>
+        </ng-template>
+      </e-column>
+
+      <e-column [allowEditing]="staffAccess()" field="docs_date" headerText="Docs Date" width="140" textAlign="Center"
+                editType="datepickeredit">
+        <ng-template #template let-data>
+          <div>{{ data.docs_date | date: 'MM/dd/YYYY' }}</div>
+        </ng-template>
+      </e-column>
+      <e-column [allowEditing]="false" field="payment_due_date" headerText="Payment Due Date" width="180"
+                textAlign="Center" editType="datepickeredit">
+        <ng-template #template let-data>
+          <div>{{ data.payment_due_date | date: 'MM/dd/YYYY' }}</div>
+        </ng-template>
+      </e-column>
+
+    </e-columns>
+  </ejs-grid>
+</div>
+
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<div class="fixed top-0 right-2 z-99999">
+  <p-messages></p-messages>
+</div>

@@ -1,0 +1,15 @@
+<div class="login-container">
+  <div class="login-left">
+    <h2>Login! 👋</h2>
+    <form (ngSubmit)="login()">
+      <label for="email">Email</label>
+      <input type="email" [(ngModel)]="email" value="" id="email" name="email" placeholder="sample@tvplogistics.com">
+      <label for="password">Password</label>
+      <input type="password" id="password" [(ngModel)]="password"  value="" name="password" placeholder="******">
+      <button type="submit" class="btn btn-signin">Sign In</button>
+    </form>
+  </div>
+</div>
+<div class="fixed top-0 right-2 z-99999">
+  <p-messages></p-messages>
+</div>

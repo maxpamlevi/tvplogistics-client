@@ -1,0 +1,33 @@
+<div class="flex justify-between main">
+  <div class="flex items-center rounded-xl border-b-stone-400 px-4 py-3">
+    <a class="px-4 py-3 flex items-center" href="/dashboard"><i class="pi pi-home"></i><span class="pl-2">Dashboard</span></a>
+    <a class="px-4 py-3 flex items-center" *ngIf="isAdmin()" href="/information"><i class="pi pi-fw pi-users"></i><span class="pl-2">Customers</span></a>
+    <a class="px-4 py-3 flex items-center" href="/debit_notes"><i class="pi pi-file-edit"></i><span class="pl-2">Debit note</span></a>
+    <a class="px-4 py-3 flex items-center" *ngIf="notStaff()" href="/payment_requests"><i class="pi pi-file-check"></i><span class="pl-2">Payment request</span></a>
+    <a class="px-4 py-3 flex items-center" *ngIf="isAdmin()"  href="/report"><i class="pi pi-chart-line"></i><span class="pl-2">Report</span></a>
+  </div>
+  <div *ngIf="user" class="flex mr-3">
+
+    <div class="flex items-center">
+      <div>
+        <p-selectButton
+          [options]="stateOptions"
+          [(ngModel)]="branch"
+          (onChange)="changeBranch($event)"
+          optionLabel="label"
+          optionValue="value" />
+      </div>
+      <a class="px-4 py-3 flex items-center">{{ user.name }}<span style="width: 30px; text-align: center">|</span>
+          <div class="flex align-items-center justify-content-center" style="width: 30px; height: 30px">
+            <p-speedDial
+              [model]="items"
+              [radius]="80"
+              direction="down"
+              showIcon="pi pi-user" buttonClassName="p-button-link"
+              hideIcon="pi pi-times" />
+          </div>
+      </a>
+    </div>
+  </div>
+</div>
+
